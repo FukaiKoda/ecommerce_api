@@ -34,32 +34,32 @@ This project follows **Clean Code** principles and a strict **Separation of Conc
 graph TD
     Client[Client Browser / Mobile] -->|HTTP Request| API[Express App / Router]
     
-    subgraph Middleware Layer
+    subgraph Middleware["Middleware Layer"]
         API --> AuthMW[Auth Middleware]
         API --> ValMW[Joi Validation]
         API --> RlMW[Rate Limiter]
     end
 
-    subgraph Controller Layer
+    subgraph Controller["Controller Layer"]
         AuthMW --> AuthC[Auth Controller]
         ValMW --> ProdC[Product Controller]
         ValMW --> OrderC[Order Controller]
     end
 
-    subgraph Service Layer (Business Logic)
+    subgraph Service["Service Layer (Business Logic)"]
         AuthC --> AuthS[Auth Service]
         ProdC --> ProdS[Product Service]
         OrderC --> OrderS[Order Service]
     end
 
-    subgraph Repository Layer (Data Access)
+    subgraph Repository["Repository Layer (Data Access)"]
         AuthS --> AuthR[Auth Repository]
         ProdS --> ProdR[Product Repository]
         OrderS --> OrderR[Order Repository]
         OrderS -.-> ProdR
     end
 
-    subgraph Infrastructure
+    subgraph Infrastructure["Infrastructure"]
         AuthR -.-> DB[(PostgreSQL)]
         ProdR -.-> DB
         OrderR -.-> DB
@@ -111,3 +111,4 @@ This is implemented via a clean `authorize` middleware that inspects `req.sessio
    npm run dev
    ```
 5. Navigate to `http://localhost:3000` to interact with the frontend UI.
+
