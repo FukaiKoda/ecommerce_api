@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products — ShopAPI</title>
+    <meta name="description" content="Browse and manage products in the ShopAPI ecommerce platform.">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* ── Page shell ── */
+        .products-page { min-height: 100vh; display: flex; flex-direction: column; }
+        .products-main { flex: 1; max-width: 1100px; margin: 0 auto; width: 100%; padding: 2rem 1.5rem 4rem; }
+
+        /* ── Page header ── */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-header-left h1 { font-size: 1.6rem; margin-bottom: 0.2rem; }
+        .page-header-left p  { font-size: 0.875rem; }
+
+        .role-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .role-badge.admin   { background: rgba(96,165,250,0.12); border: 1px solid rgba(96,165,250,0.35); color: #60a5fa; }
+        .role-badge.customer{ background: rgba(74,222,128,0.1);  border: 1px solid rgba(74,222,128,0.3);  color: #4ade80; }
+
+        /* ── Debug switcher ── */
+        .debug-bar {
+            background: rgba(250,204,21,0.06);
+            border: 1px solid rgba(250,204,21,0.2);
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+        .debug-bar-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #fbbf24;
+            white-space: nowrap;
+        }
+        .debug-bar p { font-size: 0.8rem; color: var(--text-subtle); flex: 1; margin: 0; }
+        .debug-actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .btn-warn {
+            background: rgba(250,204,21,0.1);
+            color: #fbbf24;
+            border-color: rgba(250,204,21,0.3);
+        }
+        .btn-warn:hover { background: rgba(250,204,21,0.18); }
+
+        /* ── Admin panel (add product) ── */
+        .admin-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+        .admin-panel.visible { display: block; }
+        .admin-panel h2 { font-size: 1rem; margin-bottom: 1rem; }
+        .admin-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        .admin-form .span-full { grid-column: 1 / -1; }
+        .input-sm { height: 36px; font-size: 0.82rem; }
+        textarea.input {
+            height: auto;
+            padding: 0.6rem 0.875rem;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+        }
+
+        /* ── Products grid ── */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .section-header h2 { font-size: 1rem; }
+        .count-badge {
+            font-size: 0.75rem;
+            color: var(--text-subtle);
+            background: var(--ghost-hover);
+            padding: 0.15rem 0.55rem;
+            border-radius: 9999px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+        .product-card:hover { border-color: var(--border-light); transform: translateY(-2px); }
+
+        .product-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.5rem; }
+        .product-title { font-size: 0.95rem; font-weight: 600; color: var(--text); line-height: 1.3; }
+        .product-id { font-size: 0.7rem; color: var(--text-subtle); font-family: monospace; margin-top: 0.15rem; }
+        .product-desc { font-size: 0.825rem; color: var(--text-muted); line-height: 1.5; flex: 1; }
+        .product-meta { display: flex; align-items: center; justify-content: space-between; }
+        .product-price { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+        .product-stock { font-size: 0.75rem; color: var(--text-subtle); }
+        .product-stock.low { color: #f87171; }
+
+        .product-admin-actions {
+            display: none;
+            gap: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--border);
+        }
+        .product-admin-actions.visible { display: flex; }
+        .btn-sm { height: 30px; padding: 0 0.75rem; font-size: 0.78rem; }
+        .btn-danger { background: rgba(239,68,68,0.1); color: #f87171; border-color: rgba(239,68,68,0.3); }
+        .btn-danger:hover { background: rgba(239,68,68,0.18); }
+
+        /* ── Edit modal ── */
+        .modal-backdrop {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        .modal-backdrop.open { display: flex; }
+        .modal {
+            background: var(--surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-lg);
+            padding: 1.75rem;
+            width: 100%;
+            max-width: 500px;
+            animation: fadeUp 0.2s ease both;
+        }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+        .modal-header h2 { font-size: 1.05rem; }
+        .modal-close { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.2rem; padding: 0.2rem; }
+        .modal-close:hover { color: var(--text); }
+        .modal-tabs { display: flex; gap: 0.25rem; margin-bottom: 1.25rem; background: var(--bg); border-radius: var(--radius-sm); padding: 0.25rem; }
+        .modal-tab {
+            flex: 1; height: 32px; border: none; cursor: pointer;
+            background: transparent; color: var(--text-muted);
+            border-radius: calc(var(--radius-sm) - 2px);
+            font-size: 0.82rem; font-weight: 500; font-family: inherit;
+            transition: background 0.15s, color 0.15s;
+        }
+        .modal-tab.active { background: var(--surface); color: var(--text); }
+        .modal-form { display: flex; flex-direction: column; gap: 0.75rem; }
+        .modal-note { font-size: 0.78rem; color: var(--text-subtle); margin-bottom: 0.5rem; }
+
+        /* ── Empty / loading states ── */
+        .state-box {
+            text-align: center;
+            padding: 4rem 1rem;
+            color: var(--text-subtle);
+        }
+        .state-box .state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .state-box p { font-size: 0.875rem; margin-top: 0.4rem; }
+
+        /* ── Response log (debug) ── */
+        .response-log {
+            margin-top: 2.5rem;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+        .response-log-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .response-log-header span { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
+        .log-entries { max-height: 260px; overflow-y: auto; font-family: monospace; font-size: 0.78rem; }
+        .log-entry {
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 0.75rem;
+            align-items: center;
+        }
+        .log-entry:last-child { border-bottom: none; }
+        .log-method { font-weight: 700; width: 50px; }
+        .log-path { color: var(--text-muted); }
+        .log-status { }
+        .status-ok   { color: #4ade80; }
+        .status-err  { color: #f87171; }
+        .log-empty { padding: 1rem; text-align: center; color: var(--text-subtle); font-size: 0.8rem; font-family: inherit; }
+
+        @media (max-width: 600px) {
+            .admin-form { grid-template-columns: 1fr; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body class="products-page">
+
+<!-- ── Navigation ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo" id="nav-logo">
+            <span>S</span>
+            ShopAPI
+        </a>
+        <div class="nav-actions" id="nav-actions">
+            <!-- filled by JS -->
+        </div>
+    </div>
+</nav>
+
+<!-- ── Main ── -->
+<main class="products-main">
+
+    <!-- Page header -->
+    <div class="page-header animate-fade-up">
+        <div class="page-header-left">
+            <h1>Products</h1>
+            <p>Browse the catalogue. Admins can add, edit, and remove products.</p>
+        </div>
+        <div id="role-badge-container"></div>
+    </div>
+
+    <!-- ⚠️ Debug bar: role switcher -->
+    <div class="debug-bar animate-fade-up delay-1">
+        <span class="debug-bar-label">⚠ Dev only</span>
+        <p>Switch your role for testing — calls <code>POST /user/:role/:id</code> on the backend.</p>
+        <div class="debug-actions">
+            <button class="btn btn-sm btn-warn" id="btn-role-customer">Set CUSTOMER</button>
+            <button class="btn btn-sm btn-warn" id="btn-role-admin">Set ADMIN</button>
+        </div>
+    </div>
+
+    <!-- Alert banner (page-level) -->
+    <div class="alert" id="page-alert" role="alert" style="margin-bottom:1rem;"></div>
+
+    <!-- Admin: Add product form -->
+    <div class="admin-panel" id="admin-panel">
+        <h2>➕ Add new product</h2>
+        <form id="add-product-form" class="admin-form" novalidate autocomplete="off">
+            <div class="form-group">
+                <label for="add-title">Title</label>
+                <input class="input input-sm" id="add-title" type="text" placeholder="Product name" required>
+            </div>
+            <div class="form-group">
+                <label for="add-price">Price ($)</label>
+                <input class="input input-sm" id="add-price" type="number" min="0" step="0.01" placeholder="0.00" required>
+            </div>
+            <div class="form-group">
+                <label for="add-stock">Stock</label>
+                <input class="input input-sm" id="add-stock" type="number" min="0" placeholder="0" required>
+            </div>
+            <div class="form-group">
+                <label for="add-description">Description</label>
+                <textarea class="input input-sm" id="add-description" placeholder="Short description…" rows="2" required></textarea>
+            </div>
+            <div class="span-full" style="display:flex;gap:0.5rem;justify-content:flex-end;">
+                <button type="reset" class="btn btn-outline btn-sm">Clear</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="add-submit">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="btn-label">Add product</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Products grid -->
+    <div class="section-header">
+        <h2>Catalogue</h2>
+        <span class="count-badge" id="products-count">0 products</span>
+    </div>
+    <div id="products-container">
+        <div class="state-box">
+            <div class="state-icon">⏳</div>
+            <p>Loading products…</p>
+        </div>
+    </div>
+
+    <!-- Response log -->
+    <div class="response-log animate-fade-in delay-2">
+        <div class="response-log-header">
+            <span>📋 API Response Log</span>
+            <button class="btn btn-ghost btn-sm" id="btn-clear-log">Clear</button>
+        </div>
+        <div class="log-entries" id="log-entries">
+            <div class="log-empty">No requests yet — interact with the page to see logs here.</div>
+        </div>
+    </div>
+
+</main>
+
+<!-- ── Edit / Replace Modal ── -->
+<div class="modal-backdrop" id="edit-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="modal-title">Edit product <span id="modal-product-id" style="color:var(--text-subtle);font-size:0.85em;"></span></h2>
+            <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+        </div>
+
+        <!-- Tabs: PUT vs PATCH -->
+        <div class="modal-tabs" role="tablist">
+            <button class="modal-tab active" id="tab-patch" role="tab" aria-selected="true">PATCH (partial)</button>
+            <button class="modal-tab" id="tab-put" role="tab" aria-selected="false">PUT (replace all)</button>
+        </div>
+
+        <p class="modal-note" id="modal-note">Fill only the fields you want to update.</p>
+
+        <div class="alert" id="modal-alert" role="alert" style="margin-bottom:0.75rem;"></div>
+
+        <form id="edit-form" class="modal-form" novalidate autocomplete="off">
+            <div class="form-group">
+                <label for="edit-title">Title</label>
+                <input class="input input-sm" id="edit-title" type="text" placeholder="Product name">
+            </div>
+            <div class="form-group">
+                <label for="edit-description">Description</label>
+                <textarea class="input input-sm" id="edit-description" placeholder="Short description…" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="edit-price">Price ($)</label>
+                <input class="input input-sm" id="edit-price" type="number" min="0" step="0.01" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label for="edit-stock">Stock</label>
+                <input class="input input-sm" id="edit-stock" type="number" min="0" placeholder="0">
+            </div>
+            <div style="display:flex;gap:0.5rem;justify-content:flex-end;margin-top:0.25rem;">
+                <button type="button" class="btn btn-outline btn-sm" id="modal-cancel">Cancel</button>
+                <button type="submit" class="btn btn-primary btn-sm" id="edit-submit">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="btn-label">Save changes</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="/main.js" type="module"></script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopAPI — E-Commerce Platform</title>
+    <meta name="description" content="A modern e-commerce REST API demo. Browse the platform, create an account, or sign in.">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        /* ── Home-page specific styles ── */
+
+        /* Hero */
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 5rem 1.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.2rem, 6vw, 3.5rem);
+            letter-spacing: -0.04em;
+            max-width: 680px;
+        }
+
+        .hero h1 em {
+            font-style: normal;
+            color: var(--text-muted);
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            max-width: 540px;
+            color: var(--text-muted);
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        /* Feature grid */
+        .features {
+            max-width: 1100px;
+            margin: 3rem auto 5rem;
+            padding: 0 1.5rem;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .features-header h2 { margin-bottom: 0.5rem; }
+        .features-header p  { font-size: 0.95rem; }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .feature-card:hover {
+            border-color: var(--border-light);
+            transform: translateY(-2px);
+        }
+
+        .feature-icon {
+            width: 40px; height: 40px;
+            border-radius: var(--radius-sm);
+            background: var(--ghost-hover);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 { margin-bottom: 0.4rem; }
+        .feature-card p  { font-size: 0.875rem; }
+
+        /* API preview strip */
+        .api-strip {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 0;
+            overflow: hidden;
+        }
+
+        .api-strip-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .api-strip-label {
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-subtle);
+            white-space: nowrap;
+        }
+
+        .api-pills {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .api-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 9999px;
+            font-size: 0.78rem;
+            font-family: "SF Mono", "Fira Code", "Cascadia Code", monospace;
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+        }
+
+        .method { font-weight: 700; }
+        .method-get    { color: #4ade80; }
+        .method-post   { color: #60a5fa; }
+        .method-put    { color: #facc15; }
+        .method-delete { color: #f87171; }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-subtle);
+            font-size: 0.825rem;
+        }
+
+        @media (max-width: 600px) {
+            .hero { padding: 3rem 1rem 2rem; }
+            .hero-actions { flex-direction: column; align-items: stretch; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Navigation ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo" id="nav-logo">
+            <span>S</span>
+            ShopAPI
+        </a>
+        <div class="nav-actions">
+            <a href="/login.html" class="btn btn-ghost" id="nav-login">Log in</a>
+            <a href="/signup.html" class="btn btn-outline" id="nav-signup">Sign up</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── Hero ── -->
+<section class="hero">
+    <div class="badge animate-fade-up">Learning project · REST API</div>
+    <h1 class="animate-fade-up delay-1">
+        A backend built<br>
+        <em>the right way</em>
+    </h1>
+    <p class="animate-fade-up delay-2">
+        An e-commerce REST API using Express, Prisma, Argon2, and clean architecture —
+        Repository Pattern, Dependency Injection, and layered separation of concerns.
+    </p>
+    <div class="hero-actions animate-fade-up delay-3">
+        <a href="/signup.html" class="btn btn-primary btn-lg" id="hero-cta-signup">Get started</a>
+        <a href="/login.html"  class="btn btn-outline btn-lg" id="hero-cta-login">Sign in</a>
+    </div>
+</section>
+
+<!-- ── API Routes Strip ── -->
+<div class="api-strip animate-fade-in delay-4">
+    <div class="api-strip-inner">
+        <span class="api-strip-label">Endpoints</span>
+        <div class="api-pills">
+            <span class="api-pill"><span class="method method-post">POST</span>/auth/signup</span>
+            <span class="api-pill"><span class="method method-post">POST</span>/auth/login</span>
+            <span class="api-pill"><span class="method method-get">GET</span> /products</span>
+            <span class="api-pill"><span class="method method-post">POST</span>/orders</span>
+            <span class="api-pill"><span class="method method-put">PUT</span> /orders/:id</span>
+            <span class="api-pill"><span class="method method-delete">DELETE</span>/products/:id</span>
+        </div>
+    </div>
+</div>
+
+<!-- ── Features ── -->
+<section class="features">
+    <div class="features-header animate-fade-up">
+        <h2>What's under the hood</h2>
+        <p>Key architectural concepts applied in this project</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card animate-fade-up delay-1">
+            <div class="feature-icon">🏛️</div>
+            <h3>Repository Pattern</h3>
+            <p>Services never touch the database directly. A dedicated Repository layer mediates all Prisma calls, making the data layer swappable.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-2">
+            <div class="feature-icon">💉</div>
+            <h3>Dependency Injection</h3>
+            <p>Controllers receive a Service instance; Services receive a Repository instance through their constructors. Zero tight coupling.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-3">
+            <div class="feature-icon">🔐</div>
+            <h3>Argon2id Hashing</h3>
+            <p>Industry-standard password hashing using Argon2id — the winner of the Password Hashing Competition. No plain-text secrets.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-4">
+            <div class="feature-icon">🛡️</div>
+            <h3>Joi Validation</h3>
+            <p>All request body validation happens server-side in middleware. The frontend enforces nothing — trust is earned, not assumed.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-5">
+            <div class="feature-icon">🗄️</div>
+            <h3>Prisma ORM</h3>
+            <p>Type-safe database access with a declarative schema. Migrations are versioned and reproducible via <code style="font-size:0.82em;color:var(--text-muted)">prisma migrate</code>.</p>
+        </div>
+        <div class="feature-card animate-fade-up delay-5">
+            <div class="feature-icon">⚡</div>
+            <h3>Express 5 + Helmet</h3>
+            <p>Built on Express 5 with rate limiting, CORS, and Helmet for sensible security defaults right out of the box.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+    <p>project_2_ecommerce_api · Built for learning &amp; practice · Not for production use</p>
+</footer>
+
+<script src="/main.js" type="module"></script>
+</body>
+</html>

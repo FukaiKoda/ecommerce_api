@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log in — ShopAPI</title>
+    <meta name="description" content="Sign in to your ShopAPI account.">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="auth-page">
+
+<!-- ── Navigation ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo" id="nav-logo">
+            <span>S</span>
+            ShopAPI
+        </a>
+        <div class="nav-actions">
+            <a href="/signup.html" class="btn btn-outline" id="nav-signup">Sign up</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── Auth Content ── -->
+<main class="auth-main">
+    <div class="auth-box">
+
+        <!-- Header -->
+        <div class="auth-header animate-fade-up">
+            <h1>Welcome back</h1>
+            <p>Enter your credentials to continue</p>
+        </div>
+
+        <!-- Alert banner -->
+        <div class="alert" id="login-alert" role="alert"></div>
+
+        <!-- Card -->
+        <div class="card animate-fade-up delay-1">
+            <form class="auth-form" id="login-form" novalidate autocomplete="off">
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="login-username">Username</label>
+                    <input
+                        class="input"
+                        id="login-username"
+                        name="username"
+                        type="text"
+                        placeholder="janedoe"
+                        autocomplete="username"
+                    >
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input
+                        class="input"
+                        id="login-password"
+                        name="password"
+                        type="password"
+                        placeholder="••••••••"
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary btn-full btn-lg" id="login-submit">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="btn-label">Sign in</span>
+                </button>
+
+            </form>
+        </div>
+
+        <!-- Footer link -->
+        <p class="auth-footer-text animate-fade-up delay-2">
+            Don't have an account?
+            <a href="/signup.html" id="link-signup">Create one</a>
+        </p>
+
+    </div>
+</main>
+
+<script src="/main.js" type="module"></script>
+</body>
+</html>

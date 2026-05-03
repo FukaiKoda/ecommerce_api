@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up — ShopAPI</title>
+    <meta name="description" content="Create your ShopAPI account.">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="auth-page">
+
+<!-- ── Navigation ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo" id="nav-logo">
+            <span>S</span>
+            ShopAPI
+        </a>
+        <div class="nav-actions">
+            <a href="/login.html" class="btn btn-ghost" id="nav-login">Log in</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ── Auth Content ── -->
+<main class="auth-main">
+    <div class="auth-box">
+
+        <!-- Header -->
+        <div class="auth-header animate-fade-up">
+            <h1>Create an account</h1>
+            <p>Enter your details below to get started</p>
+        </div>
+
+        <!-- Alert banner -->
+        <div class="alert" id="signup-alert" role="alert"></div>
+
+        <!-- Card -->
+        <div class="card animate-fade-up delay-1">
+            <form class="auth-form" id="signup-form" novalidate autocomplete="off">
+
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="signup-name">Full name</label>
+                    <input
+                        class="input"
+                        id="signup-name"
+                        name="name"
+                        type="text"
+                        placeholder="Jane Doe"
+                        autocomplete="name"
+                    >
+                </div>
+
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="signup-username">Username</label>
+                    <input
+                        class="input"
+                        id="signup-username"
+                        name="username"
+                        type="text"
+                        placeholder="janedoe"
+                        autocomplete="username"
+                    >
+                    <span class="field-hint">5–10 characters</span>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="signup-email">Email address</label>
+                    <input
+                        class="input"
+                        id="signup-email"
+                        name="email"
+                        type="text"
+                        placeholder="jane@example.com"
+                        autocomplete="email"
+                    >
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input
+                        class="input"
+                        id="signup-password"
+                        name="password"
+                        type="password"
+                        placeholder="••••••••"
+                        autocomplete="new-password"
+                    >
+                    <span class="field-hint">Letters, digits, underscores and hyphens only</span>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary btn-full btn-lg" id="signup-submit">
+                    <span class="spinner" aria-hidden="true"></span>
+                    <span class="btn-label">Create account</span>
+                </button>
+
+            </form>
+        </div>
+
+        <!-- Footer link -->
+        <p class="auth-footer-text animate-fade-up delay-2">
+            Already have an account?
+            <a href="/login.html" id="link-login">Sign in</a>
+        </p>
+
+    </div>
+</main>
+
+<script src="/main.js" type="module"></script>
+</body>
+</html>

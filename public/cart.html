@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart — ShopAPI</title>
+    <meta name="description" content="View your cart and order history.">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .cart-page { min-height: 100vh; display: flex; flex-direction: column; }
+        .cart-main { flex: 1; max-width: 900px; margin: 0 auto; width: 100%; padding: 2rem 1.5rem 4rem; }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .page-header h1 { font-size: 1.6rem; margin-bottom: 0.2rem; }
+        .page-header p  { font-size: 0.875rem; color: var(--text-muted); }
+
+        .section-container {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-header { margin-bottom: 1rem; border-bottom: 1px solid var(--border-light); padding-bottom: 0.75rem; }
+        .section-header h2 { font-size: 1.2rem; }
+
+        .cart-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        .cart-total-label { font-size: 1rem; color: var(--text-muted); }
+        .cart-total-value { font-size: 1.4rem; font-weight: 700; color: var(--text); }
+
+        .state-box {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-subtle);
+        }
+        .state-box .state-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .state-box p { font-size: 0.875rem; margin-top: 0.4rem; }
+
+        .log-entry {
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border-light);
+            display: grid;
+            gap: 0.75rem;
+        }
+        .log-entry:last-child { border-bottom: none; }
+
+        .product-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+        }
+    </style>
+</head>
+<body class="cart-page">
+
+<!-- ── Navigation ── -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-logo" id="nav-logo">
+            <span>S</span>
+            ShopAPI
+        </a>
+        <div class="nav-actions" id="nav-actions">
+            <!-- filled by JS -->
+        </div>
+    </div>
+</nav>
+
+<!-- ── Main ── -->
+<main class="cart-main">
+
+    <div class="page-header animate-fade-up">
+        <div>
+            <h1>Your Cart</h1>
+            <p>Review your items and place your order.</p>
+        </div>
+    </div>
+
+    <!-- Alert banner -->
+    <div class="alert" id="page-alert" role="alert" style="margin-bottom:1rem;"></div>
+
+    <!-- Current Cart Section -->
+    <div class="section-container animate-fade-up delay-1">
+        <div class="section-header">
+            <h2>Items</h2>
+        </div>
+        
+        <div id="cart-items-container">
+            <!-- Items injected via JS -->
+        </div>
+
+        <div class="cart-footer">
+            <div>
+                <span class="cart-total-label">Total:</span>
+                <span class="cart-total-value" id="cart-total">$0.00</span>
+            </div>
+            <button class="btn btn-primary" id="btn-place-order" disabled>
+                <span class="spinner" aria-hidden="true"></span>
+                <span class="btn-label">Place Order</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Order History Section -->
+    <div class="page-header animate-fade-up delay-2" style="margin-top: 3rem;">
+        <div>
+            <h1>Order History</h1>
+            <p>Your past purchases.</p>
+        </div>
+    </div>
+
+    <div id="order-history-container" class="animate-fade-up delay-2">
+        <!-- Orders injected via JS -->
+    </div>
+
+</main>
+
+<script src="/main.js" type="module"></script>
+</body>
+</html>
