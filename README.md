@@ -1,4 +1,4 @@
-# Project 2: E-Commerce API 🛒
+# Project 2: E-Commerce API
 
 > **Disclaimer:** This is my 2nd learning project in backend engineering. The goal of this project was to learn and implement advanced architectural patterns (OOP, Dependency Injection, Repository Pattern), session-based authentication, Role-Based Access Control (RBAC), and relational database transactions. 
 > 
@@ -6,7 +6,7 @@
 
 ---
 
-## 🛠 Tools & Technologies
+## Tools & Technologies
 
 - **Runtime:** [Node.js](https://nodejs.org/)
 - **Framework:** [Express.js](https://expressjs.com/)
@@ -18,7 +18,7 @@
 
 ---
 
-## 🏗 System Architecture & Flow
+## System Architecture & Flow
 
 This project follows **Clean Code** principles and a strict **Separation of Concerns**. The architecture isolates the routing, business logic, and database interactions into distinct layers using Dependency Injection.
 
@@ -69,7 +69,7 @@ graph TD
 
 ---
 
-## 💡 Design Patterns & Clean Code
+## Design Patterns & Clean Code
 
 ### Dependency Injection (DI)
 Classes are instantiated and wired together in the `containers` folder. Instead of hardcoding `import prisma from '...'` inside the services, the Repository is injected into the Service via the constructor. This makes the system highly testable and loosely coupled.
@@ -95,7 +95,7 @@ This is implemented via a clean `authorize` middleware that inspects `req.sessio
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 1. Clone the repository and install dependencies:
    ```bash
